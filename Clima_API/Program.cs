@@ -13,7 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
   var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-  options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+  var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+  if (File.Exists(xmlPath))
+  {
+    options.IncludeXmlComments(xmlPath);
+  }
 });
 
 var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(15));
@@ -65,6 +69,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.MapControllers();
 

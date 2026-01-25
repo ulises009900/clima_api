@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Clima_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f46133996e738e9ccd997d826286db773659177")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f680dab907e0112ad038240e9f8836e9b76470f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Clima_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Clima_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

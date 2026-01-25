@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Clima_API</name>
+    </assembly>
+    <members>
+        <member name="M:WeatherApi.Controllers.WeatherForecastController.ByGps(WeatherApi.Models.Requests.LocationRequest)">
+            <summary>
+            Obtiene el clima actual para una ubicación dada por GPS.
+            </summary>
+            <param name="request">La latitud y longitud de la ubicación.</param>
+            <returns>Las condiciones climáticas actuales.</returns>
+            <response code="200">Retorna el clima actual.</response>
+            <response code="502">Si el proveedor de clima externo tiene un error.</response>
+            <response code="503">Si el servicio de clima no está disponible temporalmente.</response>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherForecastController.EchoLocation(WeatherApi.Models.Requests.LocationRequest)">
+            <summary>
+            Devuelve la ubicación proporcionada. Útil para pruebas.
+            </summary>
+            <param name="request">La latitud y longitud de la ubicación.</param>
+            <returns>La ubicación que fue proporcionada.</returns>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherForecastController.Next24Hours(WeatherApi.Models.Requests.LocationRequest)">
+            <summary>
+            Obtiene el pronóstico del tiempo para las próximas 24 horas.
+            </summary>
+            <param name="request">La latitud y longitud de la ubicación.</param>
+            <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
+            <response code="200">Retorna el pronóstico de 24 horas.</response>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherForecastController.Next3Days(WeatherApi.Models.Requests.LocationRequest)">
+            <summary>
+            Obtiene el pronóstico del tiempo para los próximos 3 días.
+            </summary>
+            <param name="request">La latitud y longitud de la ubicación.</param>
+            <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
+            <response code="200">Retorna el pronóstico de 3 días.</response>
+        </member>
+        <member name="T:WeatherApi.Models.Requests.LocationRequest">
+            <summary>
+            Representa una ubicación geográfica con latitud y longitud.
+            </summary>
+            <param name="Lat">Latitud. Debe estar entre -90 y 90.</param>
+            <param name="Lon">Longitud. Debe estar entre -180 y 180.</param>
+        </member>
+        <member name="M:WeatherApi.Models.Requests.LocationRequest.#ctor(System.Double,System.Double)">
+            <summary>
+            Representa una ubicación geográfica con latitud y longitud.
+            </summary>
+            <param name="Lat">Latitud. Debe estar entre -90 y 90.</param>
+            <param name="Lon">Longitud. Debe estar entre -180 y 180.</param>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.LocationRequest.Lat">
+            <summary>Latitud. Debe estar entre -90 y 90.</summary>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.LocationRequest.Lon">
+            <summary>Longitud. Debe estar entre -180 y 180.</summary>
+        </member>
+        <member name="T:WeatherApi.Models.Responses.ForecastResponse">
+            <summary>
+            Representa la respuesta del pronóstico desde la API del clima.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.ForecastResponse.Forecast">
+            <summary>
+            Obtiene o establece los datos del pronóstico.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.ForecastResponse.Location">
+            <summary>
+            Obtiene o establece los datos de la ubicación.
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Models.Responses.Forecast">
+            <summary>
+            Representa el contenedor del pronóstico.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.Forecast.Forecastday">
+            <summary>
+            Obtiene o establece la lista de días de pronóstico.
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Models.Responses.ForecastDay">
+            <summary>
+            Representa el pronóstico para un solo día.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.ForecastDay.Date">
+            <summary>
+            Obtiene o establece la fecha del pronóstico.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.ForecastDay.Day">
+            <summary>
+            Obtiene o establece los datos del pronóstico diario.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.ForecastDay.Hour">
+            <summary>
+            Obtiene o establece la lista de pronósticos por hora para el día.
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Models.Responses.HourForecast">
+            <summary>
+            Representa el pronóstico para una sola hora.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.Time">
+            <summary>
+            Obtiene o establece la hora del pronóstico.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.TempC">
+            <summary>
+            Obtiene o establece la temperatura en Celsius.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.PrecipMm">
+            <summary>
+            Obtiene o establece la precipitación en milímetros.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.ChanceOfRain">
+            <summary>
+            Obtiene o establece la probabilidad de lluvia como un porcentaje.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.Humidity">
+            <summary>
+            Obtiene o establece la humedad como un porcentaje.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.HourForecast.Condition">
+            <summary>
+            Obtiene o establece la condición climática.
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Models.Responses.Day">
+            <summary>
+            Representa el resumen del pronóstico para un día.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.Day.MaxTempC">
+            <summary>
+            Obtiene o establece la temperatura máxima en Celsius.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.Day.MinTempC">
+            <summary>
+            Obtiene o establece la temperatura mínima en Celsius.
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Models.Responses.Day.Condition">
+            <summary>
+            Obtiene o establece la condición climática para el día.
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Services.WeatherApiService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{WeatherApi.Services.WeatherApiService})">
+            <summary>
+            Inicializa una nueva instancia de la clase <see cref="T:WeatherApi.Services.WeatherApiService"/>.
+            </summary>
+            <param name="http">El HttpClient a utilizar para realizar las solicitudes.</param>
+            <param name="config">La configuración para obtener la clave de API y la URL base.</param>
+            <param name="logger">El logger.</param>
+            <exception cref="T:System.InvalidOperationException">Se lanza si WeatherApi:BaseUrl o WeatherApi:ApiKey no están configurados.</exception>
+        </member>
+        <member name="M:WeatherApi.Services.WeatherApiService.GetCurrentAsync(System.Double,System.Double)">
+            <summary>
+            Obtiene el clima actual para una latitud y longitud específicas.
+            </summary>
+            <param name="lat">La latitud.</param>
+            <param name="lon">La longitud.</param>
+            <returns>La respuesta del clima actual o nulo si no se encuentra.</returns>
+        </member>
+        <member name="M:WeatherApi.Services.WeatherApiService.GetNext24HoursAsync(System.Double,System.Double)">
+            <summary>
+            Obtiene el pronóstico para las próximas 24 horas para una latitud y longitud específicas.
+            </summary>
+            <param name="lat">La latitud.</param>
+            <param name="lon">La longitud.</param>
+            <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
+        </member>
+        <member name="M:WeatherApi.Services.WeatherApiService.GetNext3DaysAsync(System.Double,System.Double)">
+            <summary>
+            Obtiene el pronóstico para los próximos 3 días para una latitud y longitud específicas.
+            </summary>
+            <param name="lat">La latitud.</param>
+            <param name="lon">La longitud.</param>
+            <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
+        </member>
+    </members>
+</doc>

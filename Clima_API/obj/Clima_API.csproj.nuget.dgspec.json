@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {}
+    "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {
+    "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
+        "projectUniqueName": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
         "projectName": "Clima_API",
-        "projectPath": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
+        "projectPath": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
         "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\obj\\",
+        "outputPath": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config"
