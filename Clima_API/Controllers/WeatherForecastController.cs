@@ -24,6 +24,14 @@ public class WeatherForecastController : ControllerBase
     _logger = logger;
   }
 
+  /// <summary>
+  /// Obtiene el clima actual para una ubicación dada por GPS.
+  /// </summary>
+  /// <param name="request">La latitud y longitud de la ubicación.</param>
+  /// <returns>Las condiciones climáticas actuales.</returns>
+  /// <response code="200">Retorna el clima actual.</response>
+  /// <response code="502">Si el proveedor de clima externo tiene un error.</response>
+  /// <response code="503">Si el servicio de clima no está disponible temporalmente.</response>
   [HttpPost("by-gps")]
   public async Task<IActionResult> ByGps([FromBody] LocationRequest request)
   {
@@ -55,12 +63,23 @@ public class WeatherForecastController : ControllerBase
     }
   }
 
+  /// <summary>
+  /// Devuelve la ubicación proporcionada. Útil para pruebas.
+  /// </summary>
+  /// <param name="request">La latitud y longitud de la ubicación.</param>
+  /// <returns>La ubicación que fue proporcionada.</returns>
   [HttpGet("echo-location")]
   public IActionResult EchoLocation([FromQuery] LocationRequest request)
   {
     return Ok(request);
   }
 
+  /// <summary>
+  /// Obtiene el pronóstico del tiempo para las próximas 24 horas.
+  /// </summary>
+  /// <param name="request">La latitud y longitud de la ubicación.</param>
+  /// <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
+  /// <response code="200">Retorna el pronóstico de 24 horas.</response>
   [HttpPost("forecast/next-24h")]
   public async Task<IActionResult> Next24Hours([FromBody] LocationRequest request)
   {
@@ -91,6 +110,12 @@ public class WeatherForecastController : ControllerBase
     }
   }
 
+  /// <summary>
+  /// Obtiene el pronóstico del tiempo para los próximos 3 días.
+  /// </summary>
+  /// <param name="request">La latitud y longitud de la ubicación.</param>
+  /// <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
+  /// <response code="200">Retorna el pronóstico de 3 días.</response>
   [HttpPost("forecast/next-3d")]
   public async Task<IActionResult> Next3Days([FromBody] LocationRequest request)
   {

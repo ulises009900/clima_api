@@ -2,6 +2,7 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 using WeatherApi.Services;
+using System.Reflection;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,14 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+  var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+  options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(15));
 
-var circuitBreakerPolicy = HttpPolicyExtensions
+var policyBuilder = HttpPolicyExtensions
     .HandleTransientHttpError()
     .Or<TimeoutRejectedException>()
-    .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests)
+    .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests);
+
+var circuitBreakerPolicy = policyBuilder
     .CircuitBreakerAsync(
         handledEventsAllowedBeforeBreaking: 5,
         durationOfBreak: TimeSpan.FromSeconds(30)
@@ -26,10 +33,7 @@ builder.Services.AddHttpClient<WeatherApiService>()
     .AddPolicyHandler((serviceProvider, request) =>
     {
       var logger = serviceProvider.GetRequiredService<ILogger<WeatherApiService>>();
-      return HttpPolicyExtensions
-          .HandleTransientHttpError()
-          .Or<TimeoutRejectedException>()
-          .OrResult(msg => msg.StatusCode == HttpStatusCode.TooManyRequests)
+      return policyBuilder
           .WaitAndRetryAsync(3,
               (retryAttempt, response, context) =>
               {

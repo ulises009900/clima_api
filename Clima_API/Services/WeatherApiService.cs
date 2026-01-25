@@ -11,6 +11,13 @@ public class WeatherApiService
   private readonly string _baseUrl;
   private readonly string _apiKey;
 
+  /// <summary>
+  /// Inicializa una nueva instancia de la clase <see cref="WeatherApiService"/>.
+  /// </summary>
+  /// <param name="http">El HttpClient a utilizar para realizar las solicitudes.</param>
+  /// <param name="config">La configuración para obtener la clave de API y la URL base.</param>
+  /// <param name="logger">El logger.</param>
+  /// <exception cref="InvalidOperationException">Se lanza si WeatherApi:BaseUrl o WeatherApi:ApiKey no están configurados.</exception>
   public WeatherApiService(HttpClient http, IConfiguration config, ILogger<WeatherApiService> logger)
   {
     _http = http;
@@ -19,6 +26,12 @@ public class WeatherApiService
     _apiKey = config["WeatherApi:ApiKey"] ?? throw new InvalidOperationException("WeatherApi:ApiKey is not configured.");
   }
 
+  /// <summary>
+  /// Obtiene el clima actual para una latitud y longitud específicas.
+  /// </summary>
+  /// <param name="lat">La latitud.</param>
+  /// <param name="lon">La longitud.</param>
+  /// <returns>La respuesta del clima actual o nulo si no se encuentra.</returns>
   public async Task<WeatherResponse?> GetCurrentAsync(double lat, double lon)
   {
     var url = FormattableString.Invariant($"{_baseUrl}current.json?key={_apiKey}&q={lat},{lon}");
@@ -38,6 +51,12 @@ public class WeatherApiService
       throw;
     }
   }
+  /// <summary>
+  /// Obtiene el pronóstico para las próximas 24 horas para una latitud y longitud específicas.
+  /// </summary>
+  /// <param name="lat">La latitud.</param>
+  /// <param name="lon">La longitud.</param>
+  /// <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
   public async Task<List<HourForecast>> GetNext24HoursAsync(double lat, double lon)
   {
     var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=2&aqi=no&alerts=no");
@@ -62,6 +81,12 @@ public class WeatherApiService
       throw;
     }
   }
+  /// <summary>
+  /// Obtiene el pronóstico para los próximos 3 días para una latitud y longitud específicas.
+  /// </summary>
+  /// <param name="lat">La latitud.</param>
+  /// <param name="lon">La longitud.</param>
+  /// <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
   public async Task<List<ForecastDay>> GetNext3DaysAsync(double lat, double lon)
   {
     var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=3&aqi=no&alerts=no");
