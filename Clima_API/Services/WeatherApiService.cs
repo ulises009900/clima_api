@@ -42,32 +42,48 @@ public class WeatherApiService
   {
     var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=2&aqi=no&alerts=no");
 
-    var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
+    try
+    {
+      var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
 
-    if (result == null)
+      if (result == null)
+        return [];
+
+      var now = DateTime.Parse(result.Location.Localtime);
+
+      return result.Forecast.Forecastday
+          .SelectMany(d => d.Hour)
+          .Where(h =>
+          {
+            var hourTime = DateTime.Parse(h.Time);
+            return hourTime >= now && hourTime <= now.AddHours(24);
+          })
+          .ToList();
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Error getting next 24h forecast for {Lat},{Lon}", lat, lon);
       return [];
-
-    var now = DateTime.Parse(result.Location.Localtime);
-
-    return result.Forecast.Forecastday
-        .SelectMany(d => d.Hour)
-        .Where(h =>
-        {
-          var hourTime = DateTime.Parse(h.Time);
-          return hourTime >= now && hourTime <= now.AddHours(24);
-        })
-        .ToList();
+    }
   }
   public async Task<List<ForecastDay>> GetNext3DaysAsync(double lat, double lon)
   {
     var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=3&aqi=no&alerts=no");
 
-    var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
+    try
+    {
+      var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
 
-    if (result == null)
+      if (result == null)
+        return [];
+
+      return result.Forecast.Forecastday;
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Error getting next 3 days forecast for {Lat},{Lon}", lat, lon);
       return [];
-
-    return result.Forecast.Forecastday;
+    }
   }
 
 }

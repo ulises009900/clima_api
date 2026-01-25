@@ -9,6 +9,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<WeatherApiService>();
 
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
