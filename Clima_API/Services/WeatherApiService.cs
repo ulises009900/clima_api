@@ -21,7 +21,7 @@ public class WeatherApiService
 
   public async Task<WeatherResponse?> GetCurrentAsync(double lat, double lon)
   {
-    var url = $"{_baseUrl}current.json?key={_apiKey}&q={lat},{lon}";
+    var url = FormattableString.Invariant($"{_baseUrl}current.json?key={_apiKey}&q={lat},{lon}").ToString();
 
     try
     {

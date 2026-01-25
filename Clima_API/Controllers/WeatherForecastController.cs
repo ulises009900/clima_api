@@ -6,11 +6,11 @@ namespace WeatherApi.Controllers;
 
 [ApiController]
 [Route("api/v1/weather")]
-public class WeatherController : ControllerBase
+public class WeatherForecastController : ControllerBase
 {
   private readonly WeatherApiService _service;
 
-  public WeatherController(WeatherApiService service)
+  public WeatherForecastController(WeatherApiService service)
   {
     _service = service;
   }
@@ -24,5 +24,11 @@ public class WeatherController : ControllerBase
       return StatusCode(502, "Weather provider error");
 
     return Ok(weather);
+  }
+
+  [HttpGet("echo-location")]
+  public IActionResult EchoLocation([FromQuery] LocationRequest request)
+  {
+    return Ok(request);
   }
 }

@@ -1,6 +1,15 @@
-@Clima_API_HostAddress = http://localhost:5126
+@Clima_API_HostAddress = http://localhost:5239
 
-GET {{Clima_API_HostAddress}}/weatherforecast/
+### Llama al endpoint que devuelve la latitud y longitud
+GET {{Clima_API_HostAddress}}/api/v1/weather/echo-location?lat=40.7128&lon=-74.0060
 Accept: application/json
 
 ###
+### Llama al endpoint que obtiene el clima por coordenadas GPS
+POST {{Clima_API_HostAddress}}/api/v1/weather/by-gps
+Content-Type: application/json
+
+{
+    "lat": 34.0522,
+    "lon": -118.2437
+}
