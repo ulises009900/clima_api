@@ -38,4 +38,36 @@ public class WeatherApiService
       return null;
     }
   }
+  public async Task<List<HourForecast>> GetNext24HoursAsync(double lat, double lon)
+  {
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=2&aqi=no&alerts=no");
+
+    var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
+
+    if (result == null)
+      return [];
+
+    var now = DateTime.Parse(result.Location.Localtime);
+
+    return result.Forecast.Forecastday
+        .SelectMany(d => d.Hour)
+        .Where(h =>
+        {
+          var hourTime = DateTime.Parse(h.Time);
+          return hourTime >= now && hourTime <= now.AddHours(24);
+        })
+        .ToList();
+  }
+  public async Task<List<ForecastDay>> GetNext3DaysAsync(double lat, double lon)
+  {
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=3&aqi=no&alerts=no");
+
+    var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
+
+    if (result == null)
+      return [];
+
+    return result.Forecast.Forecastday;
+  }
+
 }

@@ -31,4 +31,20 @@ public class WeatherForecastController : ControllerBase
   {
     return Ok(request);
   }
+
+  [HttpPost("forecast/next-24h")]
+  public async Task<IActionResult> Next24Hours([FromBody] LocationRequest request)
+  {
+    var hours = await _service.GetNext24HoursAsync(request.Lat, request.Lon);
+
+    return Ok(hours);
+  }
+
+  [HttpPost("forecast/next-3d")]
+  public async Task<IActionResult> Next3Days([FromBody] LocationRequest request)
+  {
+    var days = await _service.GetNext3DaysAsync(request.Lat, request.Lon);
+
+    return Ok(days);
+  }
 }

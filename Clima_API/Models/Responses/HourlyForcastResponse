@@ -1,0 +1,27 @@
+namespace Clima_API.Models.Responses;
+
+public class ForecastResponse
+{
+  public Forecast Forecast { get; set; } = default!;
+}
+
+public class Forecast
+{
+  public List<ForecastDay> Forecastday { get; set; } = [];
+}
+
+public class ForecastDay
+{
+  public string Date { get; set; } = "";
+  public List<HourForecast> Hour { get; set; } = [];
+}
+
+public class HourForecast
+{
+  public string Time { get; set; } = "";
+  public double Temp_C { get; set; }
+  public double Precip_Mm { get; set; }
+  public int Chance_Of_Rain { get; set; }
+  public int Humidity { get; set; }
+  public Condition Condition { get; set; } = default!;
+}
