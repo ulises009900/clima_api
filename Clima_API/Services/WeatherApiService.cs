@@ -25,17 +25,17 @@ public class WeatherApiService
 
     try
     {
-      return await _http.GetFromJsonAsync<WeatherResponse>(url);
+      var response = await _http.GetFromJsonAsync<WeatherResponse>(url);
+      if (response is null)
+      {
+        throw new InvalidOperationException("The weather API returned an empty response.");
+      }
+      return response;
     }
-    catch (HttpRequestException ex)
+    catch (Exception ex)
     {
-      _logger.LogError(ex, "An error occurred while calling the weather API. Status code: {StatusCode}", ex.StatusCode);
-      return null;
-    }
-    catch (JsonException ex)
-    {
-      _logger.LogError(ex, "Failed to deserialize weather API response from {Url}", url);
-      return null;
+      _logger.LogError(ex, "An error occurred while calling the weather API for current weather at {Lat},{Lon}", lat, lon);
+      throw;
     }
   }
   public async Task<List<HourForecast>> GetNext24HoursAsync(double lat, double lon)
@@ -47,23 +47,19 @@ public class WeatherApiService
       var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
 
       if (result == null)
-        return [];
+        throw new InvalidOperationException("The weather API returned an empty forecast response.");
 
       var now = DateTime.Parse(result.Location.Localtime);
 
       return result.Forecast.Forecastday
           .SelectMany(d => d.Hour)
-          .Where(h =>
-          {
-            var hourTime = DateTime.Parse(h.Time);
-            return hourTime >= now && hourTime <= now.AddHours(24);
-          })
+          .Where(h => DateTime.Parse(h.Time) >= now && DateTime.Parse(h.Time) <= now.AddHours(24))
           .ToList();
     }
     catch (Exception ex)
     {
       _logger.LogError(ex, "Error getting next 24h forecast for {Lat},{Lon}", lat, lon);
-      return [];
+      throw;
     }
   }
   public async Task<List<ForecastDay>> GetNext3DaysAsync(double lat, double lon)
@@ -75,14 +71,14 @@ public class WeatherApiService
       var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
 
       if (result == null)
-        return [];
+        throw new InvalidOperationException("The weather API returned an empty forecast response.");
 
       return result.Forecast.Forecastday;
     }
     catch (Exception ex)
     {
       _logger.LogError(ex, "Error getting next 3 days forecast for {Lat},{Lon}", lat, lon);
-      return [];
+      throw;
     }
   }
 

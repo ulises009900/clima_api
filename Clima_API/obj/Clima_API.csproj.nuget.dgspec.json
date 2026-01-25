@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {}
+    "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {}
   },
   "projects": {
-    "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {
+    "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
+        "projectUniqueName": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
         "projectName": "Clima_API",
-        "projectPath": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
+        "projectPath": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\Clima_API.csproj",
         "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\obj\\",
+        "outputPath": "C:\\Users\\pc\\Desktop\\git\\clima_api\\Clima_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,6 +44,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.Extensions.Http.Polly": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
