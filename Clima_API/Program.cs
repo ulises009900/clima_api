@@ -60,6 +60,16 @@ builder.Services.AddHttpClient<WeatherApiService>()
 
 builder.Services.AddMemoryCache();
 
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowAll", policy =>
+  {
+    policy.SetIsOriginAllowed(_ => true) // Permitir cualquier origen (útil para desarrollo móvil)
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+  });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -68,7 +78,9 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+
+// app.UseHttpsRedirection();
 // app.UseHttpsRedirection();
 
 app.MapControllers();

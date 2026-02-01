@@ -10,6 +10,20 @@ POST {{Clima_API_HostAddress}}/api/v1/weather/by-gps
 Content-Type: application/json
 
 {
+  "lat": 34.0522,
+  "lon": -118.2437
+}
+
+###
+### Llama al endpoint que obtiene el pronóstico por día específico
+# IMPORTANTE: Cambia "date" a la fecha de MAÑANA (ej. "2025-05-21") para ver resultados.
+POST {{Clima_API_HostAddress}}/api/v1/weather/forecast/by-date
+Content-Type: application/json
+
+{
+  "request": {
     "lat": 34.0522,
-    "lon": -118.2437
+    "lon": -118.2437,
+    "date": "2026-02-02"
+  }
 }

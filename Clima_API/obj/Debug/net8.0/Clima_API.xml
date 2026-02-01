@@ -4,38 +4,78 @@
         <name>Clima_API</name>
     </assembly>
     <members>
-        <member name="M:WeatherApi.Controllers.WeatherForecastController.ByGps(WeatherApi.Models.Requests.LocationRequest)">
+        <member name="T:WeatherApi.Controllers.WeatherController">
             <summary>
-            Obtiene el clima actual para una ubicación dada por GPS.
+            Controlador para gestionar las peticiones del clima.
             </summary>
-            <param name="request">La latitud y longitud de la ubicación.</param>
-            <returns>Las condiciones climáticas actuales.</returns>
-            <response code="200">Retorna el clima actual.</response>
-            <response code="502">Si el proveedor de clima externo tiene un error.</response>
-            <response code="503">Si el servicio de clima no está disponible temporalmente.</response>
         </member>
-        <member name="M:WeatherApi.Controllers.WeatherForecastController.EchoLocation(WeatherApi.Models.Requests.LocationRequest)">
+        <member name="M:WeatherApi.Controllers.WeatherController.GetCurrentWeather(WeatherApi.Models.Requests.LocationRequest)">
             <summary>
-            Devuelve la ubicación proporcionada. Útil para pruebas.
+            Obtiene el clima actual basado en coordenadas GPS.
             </summary>
-            <param name="request">La latitud y longitud de la ubicación.</param>
-            <returns>La ubicación que fue proporcionada.</returns>
+            <param name="request">Objeto con latitud y longitud.</param>
+            <returns>Datos del clima actual.</returns>
         </member>
-        <member name="M:WeatherApi.Controllers.WeatherForecastController.Next24Hours(WeatherApi.Models.Requests.LocationRequest)">
+        <member name="M:WeatherApi.Controllers.WeatherController.GetNext24Hours(WeatherApi.Models.Requests.LocationRequest)">
             <summary>
-            Obtiene el pronóstico del tiempo para las próximas 24 horas.
+            Obtiene el pronóstico para las próximas 24 horas.
             </summary>
-            <param name="request">La latitud y longitud de la ubicación.</param>
-            <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
-            <response code="200">Retorna el pronóstico de 24 horas.</response>
+            <param name="request">Objeto con latitud y longitud.</param>
+            <returns>Lista de pronósticos por hora.</returns>
         </member>
-        <member name="M:WeatherApi.Controllers.WeatherForecastController.Next3Days(WeatherApi.Models.Requests.LocationRequest)">
+        <member name="M:WeatherApi.Controllers.WeatherController.GetNext3Days(WeatherApi.Models.Requests.LocationRequest)">
             <summary>
-            Obtiene el pronóstico del tiempo para los próximos 3 días.
+            Obtiene el pronóstico para los próximos 3 días.
             </summary>
-            <param name="request">La latitud y longitud de la ubicación.</param>
-            <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
-            <response code="200">Retorna el pronóstico de 3 días.</response>
+            <param name="request">Objeto con latitud y longitud.</param>
+            <returns>Lista de pronósticos diarios.</returns>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherController.GetForecastByDate(WeatherApi.Models.Requests.DateLocationRequestWrapper)">
+            <summary>
+            Obtiene el pronóstico por hora para una fecha específica.
+            </summary>
+            <param name="wrapper">Envoltorio que contiene la solicitud.</param>
+            <returns>Lista de pronósticos por hora para el día especificado.</returns>
+        </member>
+        <member name="T:WeatherApi.Models.Requests.DateLocationRequest">
+            <summary>
+            Representa una solicitud de ubicación con una fecha específica.
+            </summary>
+            <param name="Lat">Latitud. Debe estar entre -90 y 90.</param>
+            <param name="Lon">Longitud. Debe estar entre -180 y 180.</param>
+            <param name="Date">Fecha en formato yyyy-MM-dd.</param>
+        </member>
+        <member name="M:WeatherApi.Models.Requests.DateLocationRequest.#ctor(System.Double,System.Double,System.DateOnly)">
+            <summary>
+            Representa una solicitud de ubicación con una fecha específica.
+            </summary>
+            <param name="Lat">Latitud. Debe estar entre -90 y 90.</param>
+            <param name="Lon">Longitud. Debe estar entre -180 y 180.</param>
+            <param name="Date">Fecha en formato yyyy-MM-dd.</param>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.DateLocationRequest.Lat">
+            <summary>Latitud. Debe estar entre -90 y 90.</summary>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.DateLocationRequest.Lon">
+            <summary>Longitud. Debe estar entre -180 y 180.</summary>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.DateLocationRequest.Date">
+            <summary>Fecha en formato yyyy-MM-dd.</summary>
+        </member>
+        <member name="T:WeatherApi.Models.Requests.DateLocationRequestWrapper">
+            <summary>
+            Wrapper para coincidir con la estructura JSON { "request": { ... } }
+            </summary>
+            <param name="Request">El objeto de solicitud interno.</param>
+        </member>
+        <member name="M:WeatherApi.Models.Requests.DateLocationRequestWrapper.#ctor(WeatherApi.Models.Requests.DateLocationRequest)">
+            <summary>
+            Wrapper para coincidir con la estructura JSON { "request": { ... } }
+            </summary>
+            <param name="Request">El objeto de solicitud interno.</param>
+        </member>
+        <member name="P:WeatherApi.Models.Requests.DateLocationRequestWrapper.Request">
+            <summary>El objeto de solicitud interno.</summary>
         </member>
         <member name="T:WeatherApi.Models.Requests.LocationRequest">
             <summary>
@@ -189,6 +229,15 @@
             <param name="lat">La latitud.</param>
             <param name="lon">La longitud.</param>
             <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
+        </member>
+        <member name="M:WeatherApi.Services.WeatherApiService.GetForecastByDayAsync(System.Double,System.Double,System.String)">
+            <summary>
+            Obtiene el pronóstico por hora para un día específico.
+            </summary>
+            <param name="lat">La latitud.</param>
+            <param name="lon">La longitud.</param>
+            <param name="date">La fecha en formato yyyy-MM-dd.</param>
+            <returns>Una lista de pronósticos por hora para el día especificado.</returns>
         </member>
     </members>
 </doc>

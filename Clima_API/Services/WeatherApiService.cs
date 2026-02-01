@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Globalization;
 using WeatherApi.Models.Responses;
 
 namespace WeatherApi.Services;
@@ -68,11 +69,16 @@ public class WeatherApiService
       if (result == null)
         throw new InvalidOperationException("The weather API returned an empty forecast response.");
 
-      var now = DateTime.Parse(result.Location.Localtime);
+      // Usar InvariantCulture para evitar errores si el servidor tiene una configuración regional diferente
+      var now = DateTime.Parse(result.Location.Localtime, CultureInfo.InvariantCulture);
 
       return result.Forecast.Forecastday
           .SelectMany(d => d.Hour)
-          .Where(h => DateTime.Parse(h.Time) >= now && DateTime.Parse(h.Time) <= now.AddHours(24))
+          .Where(h =>
+          {
+            var time = DateTime.Parse(h.Time, CultureInfo.InvariantCulture);
+            return time >= now && time <= now.AddHours(24);
+          })
           .ToList();
     }
     catch (Exception ex)
@@ -107,4 +113,38 @@ public class WeatherApiService
     }
   }
 
+  /// <summary>
+  /// Obtiene el pronóstico por hora para un día específico.
+  /// </summary>
+  /// <param name="lat">La latitud.</param>
+  /// <param name="lon">La longitud.</param>
+  /// <param name="date">La fecha en formato yyyy-MM-dd.</param>
+  /// <returns>Una lista de pronósticos por hora para el día especificado.</returns>
+  public async Task<List<HourForecast>> GetForecastByDayAsync(double lat, double lon, string date)
+  {
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&dt={date}&aqi=no&alerts=no");
+
+    try
+    {
+      var result = await _http.GetFromJsonAsync<ForecastResponse>(url);
+
+      if (result == null)
+        throw new InvalidOperationException("The weather API returned an empty forecast response.");
+
+      var dayForecast = result.Forecast.Forecastday.FirstOrDefault();
+
+      if (dayForecast == null)
+      {
+        _logger.LogWarning("No se encontró pronóstico para la fecha {Date}. Nota: El endpoint 'forecast' solo soporta fechas futuras (hasta 14 días).", date);
+        return [];
+      }
+
+      return dayForecast.Hour;
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, "Error getting forecast for date {Date} at {Lat},{Lon}", date, lat, lon);
+      throw;
+    }
+  }
 }
