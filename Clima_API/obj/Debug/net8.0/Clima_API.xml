@@ -4,39 +4,6 @@
         <name>Clima_API</name>
     </assembly>
     <members>
-        <member name="T:WeatherApi.Controllers.WeatherController">
-            <summary>
-            Controlador para gestionar las peticiones del clima.
-            </summary>
-        </member>
-        <member name="M:WeatherApi.Controllers.WeatherController.GetCurrentWeather(WeatherApi.Models.Requests.LocationRequest)">
-            <summary>
-            Obtiene el clima actual basado en coordenadas GPS.
-            </summary>
-            <param name="request">Objeto con latitud y longitud.</param>
-            <returns>Datos del clima actual.</returns>
-        </member>
-        <member name="M:WeatherApi.Controllers.WeatherController.GetNext24Hours(WeatherApi.Models.Requests.LocationRequest)">
-            <summary>
-            Obtiene el pronóstico para las próximas 24 horas.
-            </summary>
-            <param name="request">Objeto con latitud y longitud.</param>
-            <returns>Lista de pronósticos por hora.</returns>
-        </member>
-        <member name="M:WeatherApi.Controllers.WeatherController.GetNext3Days(WeatherApi.Models.Requests.LocationRequest)">
-            <summary>
-            Obtiene el pronóstico para los próximos 3 días.
-            </summary>
-            <param name="request">Objeto con latitud y longitud.</param>
-            <returns>Lista de pronósticos diarios.</returns>
-        </member>
-        <member name="M:WeatherApi.Controllers.WeatherController.GetForecastByDate(WeatherApi.Models.Requests.DateLocationRequestWrapper)">
-            <summary>
-            Obtiene el pronóstico por hora para una fecha específica.
-            </summary>
-            <param name="wrapper">Envoltorio que contiene la solicitud.</param>
-            <returns>Lista de pronósticos por hora para el día especificado.</returns>
-        </member>
         <member name="T:WeatherApi.Models.Requests.DateLocationRequest">
             <summary>
             Representa una solicitud de ubicación con una fecha específica.

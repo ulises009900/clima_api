@@ -1,71 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
+using System.Threading.Tasks;
 using WeatherApi.Models.Requests;
 using WeatherApi.Services;
-using System.Globalization;
 
-namespace WeatherApi.Controllers;
-
-/// <summary>
-/// Controlador para gestionar las peticiones del clima.
-/// </summary>
-[ApiController]
-[Route("api/v1/weather")]
-public class WeatherController : ControllerBase
+namespace Clima_API.Controllers
 {
-  private readonly WeatherApiService _weatherService;
+    [ApiController]
+    [Route("api/v1/weather")]
+    public class WeatherController : ControllerBase
+    {
+        private readonly WeatherApiService _weatherService;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly string _openWeatherApiKey;
 
-  public WeatherController(WeatherApiService weatherService)
-  {
-    _weatherService = weatherService;
-  }
+        public WeatherController(WeatherApiService weatherService, IConfiguration config, IHttpClientFactory httpClientFactory)
+        {
+            _weatherService = weatherService;
+            _httpClientFactory = httpClientFactory;
+            _openWeatherApiKey = config["OpenWeather:ApiKey"];
+        }
 
-  /// <summary>
-  /// Obtiene el clima actual basado en coordenadas GPS.
-  /// </summary>
-  /// <param name="request">Objeto con latitud y longitud.</param>
-  /// <returns>Datos del clima actual.</returns>
-  [HttpPost("by-gps")]
-  public async Task<IActionResult> GetCurrentWeather([FromBody] LocationRequest request)
-  {
-    var result = await _weatherService.GetCurrentAsync(request.Lat, request.Lon);
-    return result != null ? Ok(result) : NotFound();
-  }
+        [HttpGet("echo-location")]
+        public IActionResult EchoLocation([FromQuery] double lat, [FromQuery] double lon)
+        {
+            return Ok(new { lat, lon });
+        }
 
-  /// <summary>
-  /// Obtiene el pronóstico para las próximas 24 horas.
-  /// </summary>
-  /// <param name="request">Objeto con latitud y longitud.</param>
-  /// <returns>Lista de pronósticos por hora.</returns>
-  [HttpPost("forecast/next-24h")]
-  public async Task<IActionResult> GetNext24Hours([FromBody] LocationRequest request)
-  {
-    var result = await _weatherService.GetNext24HoursAsync(request.Lat, request.Lon);
-    return Ok(result);
-  }
+        [HttpPost("by-gps")]
+        public async Task<IActionResult> GetCurrentWeather([FromBody] LocationRequest request)
+        {
+            var result = await _weatherService.GetCurrentAsync(request.Lat, request.Lon);
+            return result is not null ? Ok(result) : NotFound();
+        }
 
-  /// <summary>
-  /// Obtiene el pronóstico para los próximos 3 días.
-  /// </summary>
-  /// <param name="request">Objeto con latitud y longitud.</param>
-  /// <returns>Lista de pronósticos diarios.</returns>
-  [HttpPost("forecast/next-3d")]
-  public async Task<IActionResult> GetNext3Days([FromBody] LocationRequest request)
-  {
-    var result = await _weatherService.GetNext3DaysAsync(request.Lat, request.Lon);
-    return Ok(result);
-  }
+        [HttpPost("forecast/next-24h")]
+        public async Task<IActionResult> GetNext24Hours([FromBody] LocationRequest request)
+        {
+            var result = await _weatherService.GetNext24HoursAsync(request.Lat, request.Lon);
+            return Ok(result);
+        }
 
-  /// <summary>
-  /// Obtiene el pronóstico por hora para una fecha específica.
-  /// </summary>
-  /// <param name="wrapper">Envoltorio que contiene la solicitud.</param>
-  /// <returns>Lista de pronósticos por hora para el día especificado.</returns>
-  [HttpPost("forecast/by-date")]
-  public async Task<IActionResult> GetForecastByDate([FromBody] DateLocationRequestWrapper wrapper)
-  {
-    // Convertir DateOnly a string formato yyyy-MM-dd para la API
-    var dateString = wrapper.Request.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-    var result = await _weatherService.GetForecastByDayAsync(wrapper.Request.Lat, wrapper.Request.Lon, dateString);
-    return Ok(result);
-  }
+        [HttpPost("forecast/next-3d")]
+        public async Task<IActionResult> GetNext3Days([FromBody] LocationRequest request)
+        {
+            var result = await _weatherService.GetNext3DaysAsync(request.Lat, request.Lon);
+            return Ok(result);
+        }
+
+        [HttpPost("forecast/by-date")]
+        public async Task<IActionResult> GetForecastByDate([FromBody] DateLocationRequestWrapper wrapper)
+        {
+            var result = await _weatherService.GetForecastByDayAsync(wrapper.Request.Lat, wrapper.Request.Lon, wrapper.Request.Date.ToString("yyyy-MM-dd"));
+            return Ok(result);
+        }
+
+        [HttpGet("radar/{z:int}/{x:int}/{y:int}")]
+        public async Task<IActionResult> GetRadarTile(int z, int x, int y)
+        {
+            var url = $"https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid={_openWeatherApiKey}";
+
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            if (!response.IsSuccessStatusCode)
+            {
+                // Leemos el error que devuelve OpenWeatherMap para saber la causa (ej. 401 Unauthorized)
+                var error = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, $"OpenWeather Error: {error}");
+            }
+
+            var stream = await response.Content.ReadAsStreamAsync();
+
+            return File(stream, "image/png");
+        }
+    }
 }
