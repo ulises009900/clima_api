@@ -35,7 +35,7 @@ public class WeatherApiService
   /// <returns>La respuesta del clima actual o nulo si no se encuentra.</returns>
   public async Task<WeatherResponse?> GetCurrentAsync(double lat, double lon)
   {
-    var url = FormattableString.Invariant($"{_baseUrl}current.json?key={_apiKey}&q={lat},{lon}");
+    var url = FormattableString.Invariant($"{_baseUrl}current.json?key={_apiKey}&q={lat},{lon}&lang=es");
 
     try
     {
@@ -60,7 +60,7 @@ public class WeatherApiService
   /// <returns>Una lista de pronósticos por hora para las próximas 24 horas.</returns>
   public async Task<List<HourForecast>> GetNext24HoursAsync(double lat, double lon)
   {
-    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=2&aqi=no&alerts=no");
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=2&aqi=no&alerts=no&lang=es");
 
     try
     {
@@ -95,7 +95,7 @@ public class WeatherApiService
   /// <returns>Una lista de pronósticos diarios para los próximos 3 días.</returns>
   public async Task<List<ForecastDay>> GetNext3DaysAsync(double lat, double lon)
   {
-    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=3&aqi=no&alerts=no");
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&days=3&aqi=no&alerts=no&lang=es");
 
     try
     {
@@ -122,7 +122,7 @@ public class WeatherApiService
   /// <returns>Una lista de pronósticos por hora para el día especificado.</returns>
   public async Task<List<HourForecast>> GetForecastByDayAsync(double lat, double lon, string date)
   {
-    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&dt={date}&aqi=no&alerts=no");
+    var url = FormattableString.Invariant($"{_baseUrl}forecast.json?key={_apiKey}&q={lat},{lon}&dt={date}&aqi=no&alerts=no&lang=es");
 
     try
     {

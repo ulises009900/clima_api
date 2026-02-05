@@ -56,23 +56,5 @@ namespace Clima_API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("radar/{z:int}/{x:int}/{y:int}")]
-        public async Task<IActionResult> GetRadarTile(int z, int x, int y)
-        {
-            var url = $"https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid={_openWeatherApiKey}";
-
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-            if (!response.IsSuccessStatusCode)
-            {
-                // Leemos el error que devuelve OpenWeatherMap para saber la causa (ej. 401 Unauthorized)
-                var error = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, $"OpenWeather Error: {error}");
-            }
-
-            var stream = await response.Content.ReadAsStreamAsync();
-
-            return File(stream, "image/png");
-        }
     }
 }
